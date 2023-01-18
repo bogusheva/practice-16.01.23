@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parallax</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      img {
+        width: 100%;
+      }
+      .wrapper {
+        background-color: rgb(1, 1, 55);
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+      .earth {
+        height: 200px;
+        width: 200px;
+        background-color: darkgreen;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .star {
+        position: absolute;
+        height: 20px;
+        width: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="earth">
+        <img src="./img/earth.svg" alt="#" />
+      </div>
+    </div>
+
+    <script>
+      // 1 реалізувати паралакс
+      // 2 видаляти подію на телефонах
+      let wrap = document.querySelector(".wrapper");
+      let star = document.querySelectorAll(".box");
+      let earth = document.querySelector(".earth");
+      earth.style.transform = `translate(100px, 100px)`;
+      for (let i = 0; i <= 100; i++) {
+        let star = document.createElement("div");
+        star.classList.add("star");
+        let random = +(Math.random() * 3).toFixed(1);
+        star.setAttribute("data-speed", random);
+        let positionTop = +(Math.random() * 90).toFixed(0);
+        let positionLeft = +(Math.random() * 90).toFixed(0);
+        star.style.top = `${positionTop}%`;
+        star.style.left = `${positionLeft}%`;
+        let starImg = document.createElement("img");
+        starImg.setAttribute("src", "./img/star.svg");
+        star.appendChild(starImg);
+        wrap.appendChild(star);
+      }
+      let stars = document.querySelectorAll(".star");
+
+      function moveEarth(event) {
+        earth.style.transform = `translate(${
+          event.clientX - earth.offsetWidth / 2
+        }px, ${event.clientY - earth.offsetHeight / 2}px)`;
+        stars.forEach((item) => {
+          let speed = item.getAttribute("data-speed");
+          item.style.transform = `translate(${
+            (event.clientX / 12) * speed
+          }px, ${(event.clientY / 12) * speed}px)`;
+        });
+      }
+
+      let click = false;
+
+      function doParallax() {
+        console.log(wrap.offsetWidth);
+        if (wrap.offsetWidth > 500) {
+          click = !click;
+          console.log(click);
+          if (click) {
+            wrap.addEventListener("mousemove", moveEarth);
+            earth.style.cursor = "none";
+          } else {
+            wrap.removeEventListener("mousemove", moveEarth);
+            earth.style.cursor = "pointer";
+          }
+        }
+      }
+
+      earth.addEventListener("click", doParallax);
+
+      // Відслідковує розмір єкрану
+      window.addEventListener("resize", function (event) {
+        console.log(wrap.offsetWidth);
+        if (wrap.offsetWidth < 500) {
+          earth.removeEventListener("click", doParallax);
+        } else {
+          earth.addEventListener("click", doParallax);
+        }
+      });
+    </script>
+  </body>
+</html>

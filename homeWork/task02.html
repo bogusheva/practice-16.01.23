@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .circle {
+        width: 100px;
+        height: 100px;
+        background-color: aqua;
+        border-radius: 50%;
+      }
+
+      .wrapper {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="circle"></div>
+    </div>
+
+    <script>
+      let wrap = document.querySelector(".wrapper");
+      let circle = document.querySelector(".circle");
+
+      function moveCircle(event) {
+        circle.style.transform = `translate(${
+          event.clientX - circle.offsetWidth / 2
+        }px, ${event.clientY - circle.offsetHeight / 2}px)`;
+      }
+
+      let click = false;
+
+      circle.addEventListener("click", () => {
+        click = !click;
+        if (click) {
+          wrap.addEventListener("mousemove", moveCircle);
+        } else {
+          wrap.removeEventListener("mousemove", moveCircle);
+        }
+      });
+    </script>
+  </body>
+</html>
