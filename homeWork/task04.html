@@ -1,45 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
     <style>
-        .box {
-            width: 100px;
-            height: 100px;
-            background-color: aqua;
-            border: 1px solid;
-            position: relative;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .wrap {
+        height: 200px;
+        width: 200px;
+        border: 1px solid black;
+      }
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: aqua;
+        border: 1px solid;
+        position: relative;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <div class="out"></div>
-
-    <div class="box"></div>
+  <body>
+    <div class="wrapper">
+      <div class="box"></div>
+    </div>
 
     <script>
-        let box = document.querySelector('.box')
+      // Зробити шоб не можна було вийти за рамки window
+      // 2: Щоб shift + ArrowRight збільшував швидкість в два рази
+      let box = document.querySelector(".box");
+      let rightBox = 0;
+      let topBox = 0;
+      let keysPressed = {};
 
-        let right = 0;
-        // Зробити шоб не можна було вийти за рамки window
-        // 2: Щоб shift + ArrowRight збільшував швидкість в два рази 
+      document.addEventListener("keydown", (event) => {
+        keysPressed[event.key] = true;
 
-        document.addEventListener('keydown', function (event) {
-            console.log(event);
-            if (event.key == 'ArrowRight') {
-                box.style.left = `${right = right + 10}px`
-            } else if (event.key == 'ArrowLeft') {
-                box.style.left = `${right = right - 10}px`
-            }
+        if (keysPressed["ArrowRight"]) {
+          if (rightBox <= window.innerWidth - box.offsetWidth - 10) {
+            box.style.left = `${(rightBox = rightBox + 10)}px`;
+          }
+        }
+        if (keysPressed["ArrowLeft"]) {
+          if (rightBox >= 10) {
+            box.style.left = `${(rightBox = rightBox - 10)}px`;
+          }
+        }
+        if (keysPressed["ArrowUp"]) {
+          if (topBox >= 10) {
+            box.style.top = `${(topBox = topBox - 10)}px`;
+          }
+        }
+        if (keysPressed["ArrowDown"]) {
+          if (topBox <= window.innerHeight - box.offsetHeight - 10) {
+            box.style.top = `${(topBox = topBox + 10)}px`;
+          }
+        }
+        if (keysPressed["Shift"] && event.key == "ArrowRight") {
+          if (rightBox <= window.innerWidth - box.offsetWidth - 20) {
+            box.style.left = `${(rightBox = rightBox + 20)}px`;
+          }
+        }
+        if (keysPressed["Shift"] && event.key == "ArrowLeft") {
+          if (rightBox >= 20) {
+            box.style.left = `${(rightBox = rightBox - 20)}px`;
+          }
+        }
+        if (keysPressed["Shift"] && event.key == "ArrowUp") {
+          if (topBox >= 20) {
+            box.style.top = `${(topBox = topBox - 20)}px`;
+          }
+        }
+        if (keysPressed["Shift"] && event.key == "ArrowDown") {
+          if (topBox <= window.innerHeight - box.offsetHeight - 20) {
+            box.style.top = `${(topBox = topBox + 20)}px`;
+          }
+        }
+      });
 
-        })
+      document.addEventListener("keyup", (event) => {
+        delete keysPressed[event.key];
+      });
     </script>
-</body>
-
+  </body>
 </html>
